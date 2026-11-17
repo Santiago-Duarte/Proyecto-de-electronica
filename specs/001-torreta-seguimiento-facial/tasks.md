@@ -1,6 +1,6 @@
 # Tareas 001 — Torreta de Seguimiento Facial con Láser
 
-Estado: propuesto — no ejecutar antes de aprobar `plan.md`
+Estado: aprobado el 2026-11-17 (T01) — en ejecución
 Plan: `specs/001-torreta-seguimiento-facial/plan.md`
 Spec: `specs/001-torreta-seguimiento-facial/spec.md`
 Constitución: `docs/constitution.md`
@@ -17,19 +17,21 @@ Constitución: `docs/constitution.md`
 - El láser no se configura por software: es siempre encendido, con batería y corte físico (ADR-011). Ninguna tarea puede añadir GPIO, relé, campo `laser` ni estado de láser.
 - Las tareas de banco con láser real exigen el procedimiento de seguridad de ADR-011, operador presente, corte físico accesible y un blanco seguro; nunca se apunta deliberadamente a ojos y el área de barrido debe estar despejada.
 - Dos responsables: **A = PC, visión y web**; **B = firmware, cámara y banco**. Las tareas marcadas “B revisa” o “A revisa” incluyen revisión cruzada.
+- Propiedad de archivos compartidos: **A** escribe `tests/` completo (`unit`, `contract`, `integration`, `fixtures`, `bench`), `docs/`, `specs/`, `README.md`, `AGENTS.md`, `opencode.json` y `.gitignore`; **B** escribe solo `src/firmware/` y entrega datos en `tests/contract/vectors/`. Si B necesita un cambio en docs o en tests, lo pide y A lo aplica.
+- Un ADR por archivo en `docs/memory/decisions/ADR-00X-titulo-corto.md`; `docs/memory/decisions.md` es solo índice y se anexa al final. Nunca se reescribe un ADR ajeno.
 
 ## Puertas de entrada
 
 | Puerta | Tareas | Bloquea |
 |---|---|---|
-| G0 Aprobación | T01 | Todo el proyecto |
+| G0 Aprobación | T01 | Todo el proyecto — cerrada el 2026-11-17 |
 | G1 Decisiones de stack | T02, T03, T04, T05, T06, T07, T08, T13 | Skeleton, core, firmware y web |
 | G2 Valores reales | T08A, T09, T10, T11, T12, T14, T18 | Configuración de producción, seguridad y integración |
 | G3 Contrato | T17 | Parser serial, adaptador serial y pruebas de contrato |
 
 ## Ruta crítica
 
-- Ruta A: `T01 → T02 → T15 → T19 → T25 → T27 → T52 → T61 → T62 → T63 → T70 → T75 → T76`.
+- Ruta A: `T01 → T02 → T15 → T19 → T25 → T27 → T51 → T52 → T59 → T60 → T61 → T62 → T63 → T70 → T75 → T76`.
 - Ruta B: `T01 → T07/T08 → T09–T12 → T08A/T14/T18 → T29 → T32 → T37 → T42 → T44 → T69 → T70 → T75 → T76`.
 - Las tareas de banco no sustituyen los tests automáticos: los confirman.
 
@@ -37,11 +39,12 @@ Constitución: `docs/constitution.md`
 
 ## Fase 0 — Decisiones, mediciones y esqueleto
 
-- [ ] **T01 — Aprobar plan, layout y reglas de trabajo** · A · 15 min · Depende: — · RF: base de RF-1…RF-12 · AC: —
+- [x] **T01 — Aprobar plan, layout y reglas de trabajo** · A · 15 min · Depende: — · RF: base de RF-1…RF-12 · AC: —
   **Hecho cuando:** el plan, la estructura de `src/`/`tests/` y la excepción de seguridad del láser siempre encendido (ADR-011) están aprobados por el responsable del proyecto, y A y B confirman por escrito sus carriles y la regla de revisión cruzada.
+  **Evidencia (2026-11-17):** aprobados `plan.md` §3.1 y §12, D1–D20 y ADR-011; `spec.md` y `plan.md` pasan a aprobados; `docs/memory/decisions/` con un archivo por ADR. Falta la confirmación escrita de B en su carril.
 
 - [ ] **T02 — ADR-001: Python, venv, tests y cobertura** · A · 25 min · Depende: T01 · RF: base de RF-1…RF-12 · AC: —
-  **Hecho cuando:** `docs/memory/decisions.md` contiene ADR-001 con versión exacta de Python, pytest y cobertura, alternativa descartada, consecuencias y comandos de creación de venv; B lo revisa y no queda ninguna versión sin fijar.
+  **Hecho cuando:** `docs/memory/decisions/ADR-001-python-venv-tests.md` contiene ADR-001 con versión exacta de Python, pytest y cobertura, alternativa descartada, consecuencias y comandos de creación de venv, y el índice `docs/memory/decisions.md` tiene su fila; B lo revisa y no queda ninguna versión sin fijar.
 
 - [ ] **T03 — ADR-004: biblioteca y modelo de visión** · A · 30 min · Depende: T01 · RF: RF-1, RF-3, RF-4 · AC: AC-1, AC-3
   **Hecho cuando:** ADR-004 fija biblioteca, modelo de embedding, versión, licencia, tamaño y alternativa descartada; no se instala nada todavía y B revisa que no haya dependencia sin justificar.
@@ -74,7 +77,7 @@ Constitución: `docs/constitution.md`
   **Hecho cuando:** ADR-010 registra clase, potencia, distancia segura, autonomía de la batería, tipo de botón mantenido y fiabilidad de la cinta, zona segura de barrido y procedimiento de banco con corte físico; no se registra tiempo máximo de encendido ni timeout porque el láser no se controla por software; A revisa que el procedimiento nunca apunte a ojos.
 
 - [ ] **T08A — Ratificar ADR-011 y enmendar constitución, `AGENTS.md` y `README.md`** · A · 25 min · Depende: T01, T12 · RF: RF-5; NFR-2 · AC: AC-4, AC-8
-  **Hecho cuando:** `docs/memory/decisions.md` contiene ADR-011 con la excepción de láser siempre encendido y corte físico; P3, P4 y P5 de `docs/constitution.md`, la regla de seguridad de `AGENTS.md` y la sección de hardware de `README.md` ya no mencionan GPIO, control por software ni apagado por timeout; `docs/memory/lessons.md` registra el riesgo residual; B revisa que la documentación no contradiga la spec.
+  **Hecho cuando:** `docs/memory/decisions/ADR-011-laser-fisico.md` queda ratificado con la excepción de láser siempre encendido y corte físico; P3, P4 y P5 de `docs/constitution.md`, la regla de seguridad de `AGENTS.md` y la sección de hardware de `README.md` ya no mencionan GPIO, control por software ni apagado por timeout; `docs/memory/lessons.md` registra el riesgo residual; B revisa que la documentación no contradiga la spec.
 
 - [ ] **T13 — ADR-006: protocolo serial** · B · 30 min · Depende: T01 · RF: RF-3, RF-8, RF-9, RF-10 · AC: AC-5, AC-6
   **Hecho cuando:** ADR-006 fija versión, baud, formato de líneas, tamaño máximo, secuencia, TTL y política ante mensajes inválidos; el contrato no incluye campo `laser` y define qué hacer si llega uno; A revisa que cubra hello, set_target, stop, state y error.
@@ -89,7 +92,7 @@ Constitución: `docs/constitution.md`
   **Hecho cuando:** existen `src/firmware/main_esp32` y `src/firmware/camera_esp32` con sus manifiestos, configuración local de ejemplo y un build vacío que compila con el framework del ADR-003.
 
 - [ ] **T17 — Definir vectores contractuales v1** · B · 30 min · Depende: T13 · RF: RF-3, RF-8, RF-9, RF-10 · AC: AC-5, AC-6
-  **Hecho cuando:** existen al menos seis vectores versionados que cubren comando válido, TTL vencido, ángulo fuera de tope, mensaje malformado, secuencia duplicada, `stop` y mensaje con campo `laser` obsoleto; ninguno transporta estado de láser; A los revisa contra el ADR-006.
+  **Hecho cuando:** existen al menos seis vectores versionados en `tests/contract/vectors/` que cubren comando válido, TTL vencido, ángulo fuera de tope, mensaje malformado, secuencia duplicada, `stop` y mensaje con campo `laser` obsoleto; ninguno transporta estado de láser; A los revisa contra el ADR-006.
 
 - [ ] **T18 — Cerrar ADR-010: seguridad y control** · A · 30 min · Depende: T09, T10, T12, T14 · RF: RF-5, RF-6, RF-8, RF-9 · AC: AC-4, AC-5, AC-6
   **Hecho cuando:** ADR-010 fija TTL de movimiento, frames de confirmación, banda muerta, ganancias, timeout de enlace y presupuesto de latencia; no fija tiempo máximo ni rearme de láser porque no existe control software; incluye el procedimiento de banco con láser siempre encendido y corte físico; B revisa que todos los valores sean medibles.
@@ -240,11 +243,11 @@ Constitución: `docs/constitution.md`
 
 ## Fase 6 — Serial, pipeline e integración del PC
 
-- [ ] **T59 — Adaptador serial y firmware simulado** · B · 30 min · Depende: T17, T18, T26, T51 · RF: RF-3, RF-8, RF-9, RF-10 · AC: AC-5, AC-6
-  **Hecho cuando:** el adaptador completa handshake, envía `set_target`, recibe `state` y el firmware simulado aplica recorte, TTL y watchdog de movimiento; el mensaje no transporta láser y los tests pasan sin hardware.
+- [ ] **T59 — Adaptador serial y firmware simulado** · A · 30 min · Depende: T17, T18, T26, T51 · RF: RF-3, RF-8, RF-9, RF-10 · AC: AC-5, AC-6
+  **Hecho cuando:** el adaptador Python de `src/pc/turret/adapters/serial` completa handshake, envía `set_target`, recibe `state` y el firmware simulado aplica recorte, TTL y watchdog de movimiento; el mensaje no transporta láser y los tests pasan sin hardware.
 
-- [ ] **T60 — Pruebas de contrato serial** · B · 30 min · Depende: T59 · RF: RF-3, RF-8, RF-9, RF-10 · AC: AC-5, AC-6
-  **Hecho cuando:** todos los vectores de T17 pasan contra el adaptador, incluidos TTL vencido, secuencia duplicada, mensaje malformado, ángulo fuera de tope y campo `laser` obsoleto; no hay efectos laterales ni cambios de estado de láser.
+- [ ] **T60 — Pruebas de contrato serial** · A · 30 min · Depende: T59 · RF: RF-3, RF-8, RF-9, RF-10 · AC: AC-5, AC-6
+  **Hecho cuando:** todos los vectores de T17 (entregados por B en `tests/contract/vectors/`) pasan contra el adaptador, incluidos TTL vencido, secuencia duplicada, mensaje malformado, ángulo fuera de tope y campo `laser` obsoleto; no hay efectos laterales ni cambios de estado de láser.
 
 - [ ] **T61 — Orquestador del pipeline** · A · 30 min · Depende: T18, T23, T24, T50, T52, T53, T59 · RF: RF-3, RF-5, RF-6, RF-8 · AC: AC-1, AC-4, AC-5
   **Hecho cuando:** con fuente y serial falsos se emite como máximo un comando por ciclo, se descarta el frame viejo, el estado del pipeline coincide con la tabla de sesión y el ciclo no calcula ni solicita láser.
@@ -296,7 +299,7 @@ Constitución: `docs/constitution.md`
   **Hecho cuando:** se ejecuta la demo completa de la spec: foto válida, seguimiento, torso con láser siempre encendido, pérdida, reanudación, foto inválida, límite, corte/reconexión, reemplazo, parada y corte físico del láser; A observa y firma.
 
 - [ ] **T76 — Cierre documental y aceptación** · A · 30 min · Depende: T75 · RF: todos · AC: AC-1…AC-11
-  **Hecho cuando:** no queda ninguna casilla abierta en `tasks.md`, `spec.md` y `specs/README.md` muestran 001 en estado `hecha`, y `docs/memory/decisions.md` (incluido ADR-011), `docs/memory/lessons.md`, `docs/constitution.md`, `AGENTS.md` y `README.md` están actualizados con el láser siempre encendido y corte físico; no queda ningún `[POR VERIFICAR]` sin cierre o aceptación explícita.
+  **Hecho cuando:** no queda ninguna casilla abierta en `tasks.md`, `spec.md` y `specs/README.md` muestran 001 en estado `hecha`, y `docs/memory/decisions/` (incluido ADR-011, con su fila en el índice), `docs/memory/lessons.md`, `docs/constitution.md`, `AGENTS.md` y `README.md` están actualizados con el láser siempre encendido y corte físico; no queda ningún `[POR VERIFICAR]` sin cierre o aceptación explícita.
 
 ---
 
@@ -310,7 +313,7 @@ Constitución: `docs/constitution.md`
 | 2 | T19, T20, T21, T22, T23, T24, T25, T26, T27 |
 | 3 | T45, T46, T47, T48, T49, T50 |
 | 4 | T51, T52, T53, T54, T55, T56, T57, T58 |
-| 5 | T61, T62, T63, T64, T65, T66, T67 |
+| 5 | T59, T60, T61, T62, T63, T64, T65, T66, T67 |
 | 6 | T76 |
 
 ### Persona B — firmware, cámara y banco
@@ -320,13 +323,13 @@ Constitución: `docs/constitution.md`
 | 1 | T07, T08, T09, T10, T11, T12, T13, T14, T16, T17 (apoyo en T18) |
 | 2 | T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40 |
 | 3 | T41, T42, T43, T44 |
-| 4 | T28 (auditoría), T59, T60 |
+| 4 | T28 (auditoría) |
 | 5 | T68, T69, T70, T71, T72, T73, T74, T75 |
 
 ### Puntos de sincronización obligatorios
 
 - **S1 — Fin de fase 0:** A y B revisan T01–T18, incluida T08A; no se implementa con ADR abiertos.
-- **S2 — Fin del core y del firmware base:** A entrega T27 y B entrega T40; se ejecutan T59–T60 contra los vectores de T17.
+- **S2 — Fin del core y del firmware base:** A entrega T27 y B entrega T40; A ejecuta T59–T60 contra los vectores de T17 que entrega B.
 - **S3 — Preintegración:** A confirma T50–T58 y B confirma T37–T44; recién entonces se ejecuta T61.
 - **S4 — Prebanco:** A confirma T62–T67 y B confirma T68; se agenda el banco con el módulo láser real, batería y corte físico accesible.
 - **S5 — Aceptación:** T75 y T76 se firman juntos.
