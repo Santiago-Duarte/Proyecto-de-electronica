@@ -9,9 +9,9 @@ Torreta Pan-Tilt de 2 ejes que identifica a una persona desde una foto subida co
 
 ## Estructura
 
-- `src/` — código fuente: **no existe todavía**; el layout se propone en el primer `plan.md` y requiere aprobación.
-- `tests/` — pruebas: **no existe todavía**; se crea junto con el primer código.
-- `docs/` — `constitution.md` (reglas innegociables), `mission.md`, `roadmap.md`, `architecture.md` y `memory/{decisions,lessons,glossary}.md`.
+- `src/` — código fuente: **no existe todavía**; layout aprobado en T01 (2026-11-17): `src/pc/turret/{core,app,adapters,web}` y `src/firmware/{main_esp32,camera_esp32}`.
+- `tests/` — pruebas: **no existe todavía**; `unit/`, `contract/` (con `vectors/`), `integration/`, `fixtures/` y `bench/`.
+- `docs/` — `constitution.md` (reglas innegociables), `mission.md`, `roadmap.md`, `architecture.md`, `memory/{lessons,glossary}.md` y `memory/decisions.md` (índice) con un ADR por archivo en `memory/decisions/`.
 - `specs/` — `NNN-nombre-corto/{spec,plan,tasks}.md`; `specs/_template/` es plantilla, no editar.
 - `README.md` — hechos de hardware y arquitectura de software; fuente de verdad física.
 - `.opencode/` — commands `sdd-*` y skill `sdd-workflow`; no modificar sin pedido.
@@ -53,7 +53,8 @@ Ningún comando está disponible aún. Prohibido documentar o sugerir comandos n
 
 ## Git
 
-- El directorio **no es** un repositorio git: no ejecutes `git init`, commits ni push sin pedido explícito.
+- El directorio **es** un repositorio git con remoto `origin` (`git@github.com:Santiago-Duarte/Proyecto-de-electronica.git`); la rama principal es `main`. No ejecutes `git init`, commits, push ni merge sin pedido explícito.
 - Commits: Conventional Commits en inglés (`feat:`, `fix:`, `docs:`, `test:`, `chore:`).
-- Ramas: `feat/…`, `fix/…`, `docs/…`.
+- Ramas: `feat/…`, `fix/…`, `docs/…`; sin espacios ni acentos. No se commitea en `main`: cada responsable trabaja en su rama y actualiza `main` solo con `git pull --ff-only`.
+- Un archivo, un escritor. `docs/memory/decisions/` usa un archivo por ADR; el índice `docs/memory/decisions.md` solo se anexa. `tests/` y `docs/` son de A; `src/firmware/` y `tests/contract/vectors/` son de B.
 - No hagas push ni merge sin que se pida explícitamente.

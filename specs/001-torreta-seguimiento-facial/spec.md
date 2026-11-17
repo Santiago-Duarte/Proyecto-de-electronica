@@ -1,6 +1,6 @@
 # Spec 001 — Torreta de Seguimiento Facial con Láser
 
-Estado: draft
+Estado: aprobada el 2026-11-17 (T01)
 
 ## Contexto y objetivo
 La torreta Pan-Tilt debe reconocer a una única persona a partir de una foto subida desde el navegador del celular y seguirla con una ESP32-CAM montada en la torreta, que transmite video en vivo por Wi-Fi local al PC; el ESP32 principal, conectado por USB, mueve los servos. El módulo láser funciona con batería y un botón físico mantenido, permanece encendido y se corta solo de forma física; cuando el objetivo queda centrado, el haz se mantiene sobre el torso. Resuelve la necesidad de demostrar, con hardware de bajo costo y sin servicios externos, un lazo completo de visión, control y actuación en tiempo real, manteniendo la seguridad del usuario y del soporte mecánico como condición de operación.

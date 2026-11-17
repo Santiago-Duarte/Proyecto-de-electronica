@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.egg-info/
+
+# Firmware (los artefactos del framework se agregan en ADR-003)
+.pio/
+
+# Configuración local y secretos (ADR-007)
+config.local.*
+secrets.*
+*.local.json
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

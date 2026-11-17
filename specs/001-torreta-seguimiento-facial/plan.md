@@ -1,10 +1,10 @@
 # Plan 001 — Torreta de Seguimiento Facial con Láser
 
-Estado: propuesto — pendiente de aprobación
-Spec de referencia: `specs/001-torreta-seguimiento-facial/spec.md` (draft)
+Estado: aprobado el 2026-11-17 (T01) — layout de `src/`/`tests/`, decisiones D1–D20 y excepción de ADR-011
+Spec de referencia: `specs/001-torreta-seguimiento-facial/spec.md` (aprobada)
 Constitución: `docs/constitution.md`
 
-Este documento define el **cómo** sin escribir código de implementación. Ninguna versión, dependencia ni valor numérico se considera fijado: todo lo que la spec dejó como `[POR VERIFICAR]` se cierra por ADR o medición de banco antes de implementar. La estructura de carpetas es una propuesta y requiere aprobación explícita.
+Este documento define el **cómo** sin escribir código de implementación. Ninguna versión, dependencia ni valor numérico se considera fijado: todo lo que la spec dejó como `[POR VERIFICAR]` se cierra por ADR o medición de banco antes de implementar. La estructura de carpetas de §3.1 está aprobada; cualquier carpeta adicional exige ADR.
 
 ---
 
@@ -79,7 +79,7 @@ El estado compartido se publica como **instantáneas inmutables**; cada campo ti
 
 ## 3. Arquitectura de módulos
 
-### 3.1 Estructura propuesta (requiere aprobación)
+### 3.1 Estructura aprobada (2026-11-17)
 
 ```text
 src/
@@ -113,7 +113,7 @@ tests/
   bench/
 ```
 
-No se crea ninguna carpeta hasta aprobar este layout.
+No se crea ninguna carpeta fuera de este layout sin ADR. El layout quedó aprobado el 2026-11-17 (T01).
 
 ### 3.2 Componentes y responsabilidades
 
@@ -501,6 +501,8 @@ El LED sustituto ya no representa el comportamiento final: la aceptación exige 
 
 Datos `[POR VERIFICAR]` que deben cerrarse con medición o decisión antes de la aceptación: tolerancia de centrado, umbral de similitud, criterios de rostro detectable, frames de confirmación, tiempo de interrupción, topes, formatos y tamaño de foto, latencia/FPS, navegadores y requisitos de PC/cámara, clase y potencia del láser, autonomía y tipo de batería, fiabilidad del botón mantenido con cinta, zona segura de barrido, riesgo de exposición ocular durante búsqueda o fallo, timeout del firmware, estabilidad del lazo, alimentación/masa/fijación y paralaje.
 
+Cada ADR vive en su propio archivo `docs/memory/decisions/ADR-00X-titulo-corto.md`; `docs/memory/decisions.md` es solo el índice. Un archivo por decisión evita que los dos responsables editen el mismo bloque.
+
 ---
 
 ## 11. Fases de implementación
@@ -520,9 +522,9 @@ Cada fase termina con sus tests en verde; no se avanza con tests fallidos o no e
 
 ---
 
-## 12. Aprobación requerida
+## 12. Aprobación
 
-Este plan queda propuesto hasta que se aprueben:
+Aprobado el 2026-11-17 (T01) por el responsable del proyecto:
 
 1. La estructura de `src/` y `tests/` de la sección 3.1.
 2. Las decisiones D1–D20, en especial MJPEG como base, hilos con descarte, JSON por líneas, ángulos absolutos con recorte en firmware, sondeo web y láser siempre encendido con corte físico.
