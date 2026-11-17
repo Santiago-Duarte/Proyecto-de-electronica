@@ -2,10 +2,10 @@
 
 ## Proyecto
 
-Torreta Pan-Tilt de 2 ejes que identifica a una persona desde una foto subida con el celular, la sigue con una cámara y le apunta con un láser. Proyecto de Electrónica General, de uso local: ESP32 por USB a un PC y el teléfono en la misma red Wi-Fi. Hoy el repo solo tiene documentación SDD: no hay código, manifiestos, tests ni CI.
+Torreta Pan-Tilt de 2 ejes que identifica a una persona desde una foto subida con el celular, la sigue con una cámara y mantiene un láser siempre encendido sobre su torso cuando queda centrada. Proyecto de Electrónica General, de uso local: ESP32 por USB a un PC y el teléfono en la misma red Wi-Fi. Hoy el repo solo tiene documentación SDD: no hay código, manifiestos, tests ni CI.
 
 - Stack: firmware C++ sobre ESP32 ESP-WROOM-32 (framework y versión sin fijar); Python 3 en el PC (versión y librerías sin fijar); sin base de datos; sin toolchain ni build declarado. Toda versión se fija por ADR antes de instalar nada.
-- Arquitectura: tres componentes desacoplados — firmware (actuadores y láser por USB), visión (cámara → ángulos) y UI web local (foto objetivo). Core puro testeable + adaptadores de I/O; dependencia unidireccional PC→ESP32, la UI no habla con el firmware.
+- Arquitectura: tres componentes desacoplados — firmware (servos y movimiento por USB), visión (cámara → ángulos) y UI web local (foto objetivo). El láser es físico: batería y corte con botón, sin control software. Core puro testeable + adaptadores de I/O; dependencia unidireccional PC→ESP32, la UI no habla con el firmware.
 
 ## Estructura
 
@@ -41,7 +41,7 @@ Ningún comando está disponible aún. Prohibido documentar o sugerir comandos n
 - Antes de tocar código, lee `docs/constitution.md` y la spec activa: ahí manda la constitución.
 - Haz cambios pequeños y enfocados en lo que se pidió; nada de refactors no solicitados.
 - **Pregunta antes de:** añadir dependencias, cambiar la estructura de carpetas, modificar el contrato PC↔ESP32 o el formato de la foto de referencia, borrar o mover archivos, editar `README.md`, `docs/constitution.md`, `docs/mission.md`, `docs/roadmap.md` u `opencode.json`, inicializar git.
-- **Nunca:** commitear secretos o credenciales, editar archivos generados o `specs/_template/`, desactivar tests o lint para que pase, hardcodear pines o índices de dispositivo fuera de configuración, inventar versiones o requisitos, energizar el láser sin verificación previa en banco (apagado por defecto, timeout, nunca a ojos).
+- **Nunca:** commitear secretos o credenciales, editar archivos generados o `specs/_template/`, desactivar tests o lint para que pase, hardcodear pines o índices de dispositivo fuera de configuración, inventar versiones o requisitos, energizar el láser sin verificación previa en banco; el láser es siempre encendido con corte físico, operador presente y blanco seguro. Prohibido apuntar deliberadamente a ojos y se debe mantener el área de barrido despejada.
 - Si algo es ambiguo o contradice la spec, detente y pregunta en un solo lote en lugar de suponer.
 
 ## Al terminar cualquier tarea
